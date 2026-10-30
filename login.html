@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOMATCH - Login</title>
+    <!-- Ícones FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+    <main class="container">
+        <!-- CABEÇALHO -->
+        <header class="header">
+            <div class="logo-container">
+                <!-- Seta para voltar para telas de usuário comum (escondida por padrão) -->
+                <button id="btn-back" class="btn-back hidden" onclick="mostrarTela('login')" title="Voltar ao início">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div class="logo">
+                    <img src="logo.png" alt="ROOMATCH Logo" class="logo-img">
+                </div>
+            </div>
+            
+            <button id="btn-top-anfitriao" class="btn-top-anfitriao" onclick="mostrarTela('anfitriao-login')">
+                Entrar como Anfitrião
+            </button>
+        </header>
+
+        <!-- CONTEÚDO PRINCIPAL (CARD COM FOTO E FORMULÁRIO) -->
+        <section class="main-card">
+            
+            <!-- FORMULÁRIO SOBREPOSTO À ESQUERDA -->
+            <div class="form-container">
+                
+                <!-- NAVEGAÇÃO ENTRE ABAS COM PÍLULA DESLIZANTE -->
+                <nav class="tabs">
+                    <div id="tab-indicator" class="tab-indicator"></div>
+                    <button id="tab-left" class="tab-btn active" onclick="cliqueAbaEsquerda()">Log-in</button>
+                    <button id="tab-right" class="tab-btn" onclick="cliqueAbaDireita()">Cadastrar-se</button>
+                </nav>
+
+                <!-- 1. USUÁRIO COMUM: LOG-IN -->
+                <form id="screen-user-login" class="screen-content active-screen" onsubmit="event.preventDefault();">
+                    <div class="avatar-placeholder">
+                        <i class="fa-solid fa-user avatar-icon"></i>
+                    </div>
+
+                    <p class="tagline">Encontre quem combina com o seu jeito de morar.</p>
+
+                    <div class="input-group">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" placeholder="Nome de usuário" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Senha" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Entrar</button>
+                    <a href="#" class="forgot-password">Esqueci minha senha</a>
+                </form>
+
+                <!-- 2. USUÁRIO COMUM: CADASTRAR-SE -->
+                <form id="screen-user-register" class="screen-content" onsubmit="event.preventDefault();">
+                    <div class="input-group">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" placeholder="Nome de usuário" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fa-solid fa-at"></i>
+                        <input type="email" placeholder="Endereço de e-mail" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Senha" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" placeholder="Telefone" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Entrar</button>
+                    <a href="#" class="forgot-password">Esqueci minha senha</a>
+                </form>
+
+                <!-- 3. ANFITRIÃO: LOG-IN (Redireciona para anfitriao.html ao clicar em Entrar) -->
+                <form id="screen-anfitriao-login" class="screen-content" onsubmit="event.preventDefault(); window.location.href='anfitriao.html';">
+                    <div class="avatar-placeholder">
+                        <i class="fa-solid fa-user-shield avatar-icon"></i>
+                    </div>
+
+                    <p class="tagline">Acesse o seu painel de anfitrião.</p>
+
+                    <div class="input-group">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" placeholder="Nome de usuário ou E-mail" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Senha" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Entrar</button>
+                    <a href="#" class="forgot-password">Esqueci minha senha</a>
+                </form>
+
+                <!-- 4. ANFITRIÃO: CADASTRAR-SE (Redireciona para anfitriao.html ao clicar em Entrar) -->
+                <form id="screen-anfitriao-register" class="screen-content" onsubmit="event.preventDefault(); window.location.href='anfitriao.html';">
+                    <div class="input-group">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" placeholder="Nome de usuário" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fa-solid fa-at"></i>
+                        <input type="email" placeholder="Endereço de e-mail" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Senha" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" placeholder="Telefone" required>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <input type="text" placeholder="CPF">
+                        </div>
+                        <div class="input-group">
+                            <input type="text" placeholder="CNPJ">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Entrar</button>
+                    <a href="#" class="forgot-password">Esqueci minha senha</a>
+                </form>
+
+            </div>
+
+            <!-- PAINEL DA IMAGEM DE FUNDO DO APARTAMENTO -->
+            <div class="hero-image-container">
+                <img src="apartamento.inicio.png" alt="Cozinha ROOMATCH" class="hero-image">
+            </div>
+
+        </section>
+    </main>
+
+    <!-- LÓGICA DE NAVEGAÇÃO -->
+    <script>
+        let modoAtual = 'usuario';
+
+        function mostrarTela(tipo) {
+            document.querySelectorAll('.screen-content').forEach(s => s.classList.remove('active-screen'));
+
+            const tabLeft = document.getElementById('tab-left');
+            const tabRight = document.getElementById('tab-right');
+            const indicator = document.getElementById('tab-indicator');
+            const btnBack = document.getElementById('btn-back');
+            const btnTopAnfitriao = document.getElementById('btn-top-anfitriao');
+
+            if (tipo === 'login' || tipo === 'cadastrar') {
+                modoAtual = 'usuario';
+                btnBack.classList.add('hidden');
+                btnTopAnfitriao.style.opacity = '1';
+                btnTopAnfitriao.style.pointerEvents = 'auto';
+
+                tabLeft.textContent = 'Log-in';
+                tabRight.textContent = 'Cadastrar-se';
+
+                if (tipo === 'login') {
+                    document.getElementById('screen-user-login').classList.add('active-screen');
+                    indicator.style.transform = 'translateX(0)';
+                } else {
+                    document.getElementById('screen-user-register').classList.add('active-screen');
+                    indicator.style.transform = 'translateX(100%)';
+                }
+            } 
+            else if (tipo === 'anfitriao-login' || tipo === 'anfitriao-register') {
+                modoAtual = 'anfitriao';
+                btnBack.classList.remove('hidden');
+                btnTopAnfitriao.style.opacity = '0.5';
+                btnTopAnfitriao.style.pointerEvents = 'none';
+
+                tabLeft.textContent = 'Entrar anfitrião';
+                tabRight.textContent = 'Cadastrar anfitrião';
+
+                if (tipo === 'anfitriao-login') {
+                    document.getElementById('screen-anfitriao-login').classList.add('active-screen');
+                    indicator.style.transform = 'translateX(0)';
+                } else {
+                    document.getElementById('screen-anfitriao-register').classList.add('active-screen');
+                    indicator.style.transform = 'translateX(100%)';
+                }
+            }
+        }
+
+        function cliqueAbaEsquerda() {
+            if (modoAtual === 'usuario') {
+                mostrarTela('login');
+            } else {
+                mostrarTela('anfitriao-login');
+            }
+        }
+
+        function cliqueAbaDireita() {
+            if (modoAtual === 'usuario') {
+                mostrarTela('cadastrar');
+            } else {
+                mostrarTela('anfitriao-register');
+            }
+        }
+    </script>
+</body>
+</html>

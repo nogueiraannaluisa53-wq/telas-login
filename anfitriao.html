@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOMATCH - Perfil do Anfitrião</title>
+    <!-- Ícones FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="anfitriao.css">
+</head>
+<body>
+
+    <main class="container">
+        <!-- CABEÇALHO -->
+        <header class="header">
+            <!-- SETA NO CANTO SUPERIOR ESQUERDO -->
+            <div class="header-left">
+                <a href="login.html" class="btn-back" title="Voltar ao início">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <!-- LOGO NO CANTO SUPERIOR DIREITO COM LINK PARA HOME -->
+            <div class="header-right">
+                <a href="home.html" class="logo-link" title="Ir para a Home">
+                    <img src="logo.png" alt="ROOMATCH Logo" class="logo-img">
+                </a>
+            </div>
+        </header>
+
+        <!-- PAINEL DE CONTEÚDO PRINCIPAL -->
+        <section class="main-card">
+            
+            <!-- COLUNA DA ESQUERDA (PERFIL E NOVO ANÚNCIO) -->
+            <div class="left-column">
+                
+                <!-- CARD DE PERFIL -->
+                <div class="profile-card">
+                    <div class="avatar-container">
+                        <i class="fa-solid fa-user avatar-icon"></i>
+                    </div>
+                    
+                    <h2 class="profile-name">
+                        Roberta Pereira 
+                        <i class="fa-solid fa-circle-check verified-icon"></i>
+                    </h2>
+
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <span class="stat-value">560</span>
+                            <span class="stat-label">avaliações</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-value">4,95 <i class="fa-solid fa-star star-icon"></i></span>
+                            <span class="stat-label">estrelas</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-value">8 <small>anos</small></span>
+                            <span class="stat-label">hospedando</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD DE NOVO ANÚNCIO -->
+                <div class="new-ad-card">
+                    <h3>Novo anúncio</h3>
+                    <div class="input-address-container">
+                        <input type="text" placeholder="Adicionar endereço">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- COLUNA DA DIREITA (MINHAS ACOMODAÇÕES) -->
+            <div class="right-column">
+                <div class="accommodations-header">
+                    <h2>Minhas acomodações</h2>
+                    <button class="btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                </div>
+
+                <div class="accommodations-list">
+
+                    <!-- ACOMODAÇÃO 1 -->
+                    <article class="accommodation-item">
+                        <p class="description">
+                            Conforto, praticidade e boa localização. O espaço perfeito para relaxar e se sentir em casa. Reserve suas datas!
+                        </p>
+                        
+                        <div class="media-container">
+                            <!-- Foto Destaque -->
+                            <div class="featured-photo">
+                                <img src="anfitriao1.1.jpg" alt="Acomodação 1 - Imagem Destaque" class="photo-img">
+                            </div>
+
+                            <!-- Coluna Direita (Fotos Menores + Botão Alinhado) -->
+                            <div class="side-column">
+                                <div class="side-photos">
+                                    <div class="small-photo">
+                                        <img src="anfitriao.1.2.webp" alt="Acomodação 1 - Foto Menor 1" class="photo-img">
+                                    </div>
+                                    <div class="small-photo photo-overlay">
+                                        <img src="anfitriao.1.2.webp" alt="Acomodação 1 - Foto Menor 2" class="photo-img">
+                                        <span class="overlay-badge">7+</span>
+                                    </div>
+                                </div>
+                                <div class="details-button-container">
+                                    <button class="btn-details">Ver detalhes <i class="fa-solid fa-chevron-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- ACOMODAÇÃO 2 -->
+                    <article class="accommodation-item">
+                        <p class="description">
+                            Iluminado, acolhedor e leve. Cama macia, Wi-Fi rápido e a paz que você precisa para descansar.
+                        </p>
+                        
+                        <div class="media-container">
+                            <!-- Foto Destaque -->
+                            <div class="featured-photo">
+                                <img src="anfitriao2.jpg" alt="Acomodação 2 - Imagem Destaque" class="photo-img">
+                            </div>
+
+                            <!-- Coluna Direita (Fotos Menores + Botão Alinhado) -->
+                            <div class="side-column">
+                                <div class="side-photos">
+                                    <div class="small-photo">
+                                        <img src="anfitriao2.2.webp" alt="Acomodação 2 - Foto Menor 1" class="photo-img">
+                                    </div>
+                                    <div class="small-photo photo-overlay">
+                                        <img src="anfitriao2.2.webp" alt="Acomodação 2 - Foto Menor 2" class="photo-img">
+                                        <span class="overlay-badge">9+</span>
+                                    </div>
+                                </div>
+                                <div class="details-button-container">
+                                    <button class="btn-details">Ver detalhes <i class="fa-solid fa-chevron-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+</body>
+</html>
