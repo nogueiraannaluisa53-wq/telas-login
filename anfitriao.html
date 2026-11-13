@@ -3,150 +3,417 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOMATCH - Perfil do Anfitrião</title>
-    <!-- Ícones FontAwesome -->
+    <title>RooMatch - Painel do Anfitrião</title>
+    
+    <!-- FONTE E ÍCONES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="anfitriao.css">
 </head>
 <body>
 
-    <main class="container">
-        <!-- CABEÇALHO -->
-        <header class="header">
-            <!-- SETA NO CANTO SUPERIOR ESQUERDO -->
+    <!-- OVERLAY DE ANIMAÇÃO AO ABRIR NOVA TELA -->
+    <div class="roomatch-transition-overlay" id="transitionOverlay">
+        <div class="transition-loader-badge">
+            <i class="fa-solid fa-pen" id="transitionIcon"></i>
+        </div>
+        <span class="transition-loader-text" id="transitionText">Abrindo tela...</span>
+    </div>
+
+    <!-- CONTAINER PRINCIPAL CENTRALIZADO -->
+    <div class="dashboard-container">
+
+        <!-- 1. CABEÇALHO SUPERIOR (HEADER) -->
+        <header class="dashboard-header">
             <div class="header-left">
-                <a href="login.html" class="btn-back" title="Voltar ao início">
+                <a href="login.html" class="btn-back" title="Sair / Voltar para o Login">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
+                <div class="brand-logo">
+                    <a href="home.html">
+                        <img src="logo.png" alt="RooMatch" class="header-logo">
+                    </a>
+                </div>
             </div>
 
-            <!-- LOGO NO CANTO SUPERIOR DIREITO COM LINK PARA HOME -->
             <div class="header-right">
-                <a href="home.html" class="logo-link" title="Ir para a Home">
-                    <img src="logo.png" alt="ROOMATCH Logo" class="logo-img">
+                <div class="notification-badge" id="notifBtn" onclick="toggleNotificationsModal()" title="Notificações">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="badge-count" id="badgeCount">2</span>
+                </div>
+                <a href="perfil-anfitriao.html" onclick="abrirComAnimacao(event, this.href, 'fa-user-pen', 'Abrindo perfil do anfitrião...')" class="user-avatar-small" title="Editar Perfil do Anfitrião" style="display: block; cursor: pointer;">
+                    <img src="perfil.anfitriao.webp" alt="Joaquín Mendes" id="headerAvatarImg">
                 </a>
             </div>
         </header>
 
-        <!-- PAINEL DE CONTEÚDO PRINCIPAL -->
-        <section class="main-card">
-            
-            <!-- COLUNA DA ESQUERDA (PERFIL E NOVO ANÚNCIO) -->
-            <div class="left-column">
-                
-                <!-- CARD DE PERFIL -->
-                <div class="profile-card">
-                    <div class="avatar-container">
-                        <i class="fa-solid fa-user avatar-icon"></i>
-                    </div>
-                    
-                    <h2 class="profile-name">
-                        Roberta Pereira 
-                        <i class="fa-solid fa-circle-check verified-icon"></i>
-                    </h2>
+        <!-- 2. PERFIL DO ANFITRIÃO CENTRALIZADO -->
+        <section class="host-profile-section">
+            <a href="perfil-anfitriao.html" onclick="abrirComAnimacao(event, this.href, 'fa-user-pen', 'Abrindo perfil do anfitrião...')" class="avatar-large-wrapper" title="Editar Perfil do Anfitrião" style="display: block; cursor: pointer;">
+                <img src="perfil.anfitriao.webp" alt="Joaquín Mendes" class="avatar-large" id="mainAvatarImg">
+            </a>
 
-                    <div class="stats-row">
-                        <div class="stat-item">
-                            <span class="stat-value">560</span>
-                            <span class="stat-label">avaliações</span>
-                        </div>
-                        <div class="stat-divider"></div>
-                        <div class="stat-item">
-                            <span class="stat-value">4,95 <i class="fa-solid fa-star star-icon"></i></span>
-                            <span class="stat-label">estrelas</span>
-                        </div>
-                        <div class="stat-divider"></div>
-                        <div class="stat-item">
-                            <span class="stat-value">8 <small>anos</small></span>
-                            <span class="stat-label">hospedando</span>
-                        </div>
-                    </div>
-                </div>
+            <h1 class="host-name" id="hostDisplayName">Joaquín Mendes</h1>
+            <span class="host-tag">ANFITRIÃO</span>
 
-                <!-- CARD DE NOVO ANÚNCIO -->
-                <div class="new-ad-card">
-                    <h3>Novo anúncio</h3>
-                    <div class="input-address-container">
-                        <input type="text" placeholder="Adicionar endereço">
-                    </div>
-                </div>
-
+            <div class="host-details-inline">
+                <span id="hostDisplayCity"><i class="fa-solid fa-location-dot"></i> Florianópolis, SC</span>
+                <span class="dot-separator">•</span>
+                <span><strong id="totalImoveisCount">12 Imóveis</strong></span>
             </div>
-
-            <!-- COLUNA DA DIREITA (MINHAS ACOMODAÇÕES) -->
-            <div class="right-column">
-                <div class="accommodations-header">
-                    <h2>Minhas acomodações</h2>
-                    <button class="btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
-                </div>
-
-                <div class="accommodations-list">
-
-                    <!-- ACOMODAÇÃO 1 -->
-                    <article class="accommodation-item">
-                        <p class="description">
-                            Conforto, praticidade e boa localização. O espaço perfeito para relaxar e se sentir em casa. Reserve suas datas!
-                        </p>
-                        
-                        <div class="media-container">
-                            <!-- Foto Destaque -->
-                            <div class="featured-photo">
-                                <img src="anfitriao1.1.jpg" alt="Acomodação 1 - Imagem Destaque" class="photo-img">
-                            </div>
-
-                            <!-- Coluna Direita (Fotos Menores + Botão Alinhado) -->
-                            <div class="side-column">
-                                <div class="side-photos">
-                                    <div class="small-photo">
-                                        <img src="anfitriao.1.2.webp" alt="Acomodação 1 - Foto Menor 1" class="photo-img">
-                                    </div>
-                                    <div class="small-photo photo-overlay">
-                                        <img src="anfitriao.1.2.webp" alt="Acomodação 1 - Foto Menor 2" class="photo-img">
-                                        <span class="overlay-badge">7+</span>
-                                    </div>
-                                </div>
-                                <div class="details-button-container">
-                                    <button class="btn-details">Ver detalhes <i class="fa-solid fa-chevron-right"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- ACOMODAÇÃO 2 -->
-                    <article class="accommodation-item">
-                        <p class="description">
-                            Iluminado, acolhedor e leve. Cama macia, Wi-Fi rápido e a paz que você precisa para descansar.
-                        </p>
-                        
-                        <div class="media-container">
-                            <!-- Foto Destaque -->
-                            <div class="featured-photo">
-                                <img src="anfitriao2.jpg" alt="Acomodação 2 - Imagem Destaque" class="photo-img">
-                            </div>
-
-                            <!-- Coluna Direita (Fotos Menores + Botão Alinhado) -->
-                            <div class="side-column">
-                                <div class="side-photos">
-                                    <div class="small-photo">
-                                        <img src="anfitriao2.2.webp" alt="Acomodação 2 - Foto Menor 1" class="photo-img">
-                                    </div>
-                                    <div class="small-photo photo-overlay">
-                                        <img src="anfitriao2.2.webp" alt="Acomodação 2 - Foto Menor 2" class="photo-img">
-                                        <span class="overlay-badge">9+</span>
-                                    </div>
-                                </div>
-                                <div class="details-button-container">
-                                    <button class="btn-details">Ver detalhes <i class="fa-solid fa-chevron-right"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                </div>
-            </div>
-
         </section>
-    </main>
 
+        <!-- 3. SEÇÃO DO MAPA & GRID DE PÍLULAS COMPACTAS -->
+        <section class="map-metrics-section">
+            
+            <!-- CONTAINER DO MAPA -->
+            <div class="map-wrapper">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d452700.12999651046!2d-48.79993679102758!3d-27.57120634528366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9527394eb2c632d7%3A0x81bc550b6a04c746!2sFlorian%C3%B3polis%2C%20SC!5e0!3m2!1spt-BR!2sbr!4v1794400863030!5m2!1spt-BR!2sbr" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="strict-origin-when-cross-origin">
+                </iframe>
+
+                <!-- CARD FLUTUANTE EM LIQUID GLASS -->
+                <div class="glass-info-card">
+                    <h3 class="glass-title">Florianópolis, Santa Catarina</h3>
+                    <p class="glass-address">Avenida Beira-Mar Norte</p>
+                </div>
+            </div>
+
+            <!-- GRID DE PÍLULAS/CHIPS -->
+            <div class="metrics-grid">
+                
+                <!-- LINHA 1 -->
+                <div class="metric-pill">
+                    <i class="fa-solid fa-file-invoice-dollar pill-icon"></i>
+                    <span class="pill-text">R$ 5.400</span>
+                </div>
+
+                <div class="metric-pill">
+                    <i class="fa-solid fa-star pill-icon"></i>
+                    <span class="pill-text">4.85 (150)</span>
+                </div>
+
+                <div class="metric-pill">
+                    <i class="fa-solid fa-calendar-check pill-icon"></i>
+                    <span class="pill-text">12 reservas</span>
+                </div>
+
+                <div class="metric-pill">
+                    <i class="fa-solid fa-comment-dots pill-icon"></i>
+                    <span class="pill-text">100% resposta</span>
+                </div>
+
+                <!-- LINHA 2 -->
+                <div class="metric-pill">
+                    <i class="fa-solid fa-key pill-icon"></i>
+                    <span class="pill-text" id="ativosPillCount">12 ativos</span>
+                </div>
+
+                <div class="metric-pill">
+                    <i class="fa-solid fa-chart-line pill-icon"></i>
+                    <span class="pill-text">85% ocupação</span>
+                </div>
+
+                <div class="metric-pill">
+                    <i class="fa-solid fa-wrench pill-icon"></i>
+                    <span class="pill-text">2 manutenções</span>
+                </div>
+
+                <div class="metric-pill">
+                    <i class="fa-solid fa-trophy pill-icon"></i>
+                    <span class="pill-text">Superhost</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 4. SEÇÃO "ACOMODAÇÕES CADASTRADAS" -->
+        <section class="properties-section">
+            <h2 class="section-title">Acomodações Cadastradas</h2>
+
+            <div class="properties-grid" id="propertiesGrid">
+                
+                <!-- CARD 1 -->
+                <article class="property-card" id="card-1">
+                    <div class="property-image-box">
+                        <img src="beira mar.jpg" alt="Apartamento Vista Mar">
+                        <span class="price-tag">R$ 350 / noite</span>
+                    </div>
+                    <div class="property-info">
+                        <h3>Apartamento Vista Mar</h3>
+                        <p class="property-location"><i class="fa-solid fa-location-dot"></i> Beira Mar Norte, Florianópolis</p>
+                        <div class="property-specs">
+                            <span><i class="fa-solid fa-bed"></i> 2 Quartos</span>
+                            <span><i class="fa-solid fa-bath"></i> 1 Banheiro</span>
+                        </div>
+                        <div class="card-buttons">
+                            <a href="editar-imovel.html?id=1" onclick="abrirComAnimacao(event, this.href, 'fa-pen', 'Abrindo edição do imóvel...')" class="btn-edit-full" style="text-decoration: none;">
+                                <i class="fa-solid fa-pen"></i> Editar
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- CARD 2 -->
+                <article class="property-card" id="card-2">
+                    <div class="property-image-box">
+                        <img src="anfitriao.1.2.webp" alt="Refúgio Aconchegante no Campo">
+                        <span class="price-tag">R$ 290 / noite</span>
+                    </div>
+                    <div class="property-info">
+                        <h3>Refúgio Aconchegante no Campo</h3>
+                        <p class="property-location"><i class="fa-solid fa-location-dot"></i> Lagoa da Conceição, Florianópolis</p>
+                        <div class="property-specs">
+                            <span><i class="fa-solid fa-bed"></i> 3 Quartos</span>
+                            <span><i class="fa-solid fa-bath"></i> 2 Banheiros</span>
+                        </div>
+                        <div class="card-buttons">
+                            <a href="editar-imovel.html?id=2" onclick="abrirComAnimacao(event, this.href, 'fa-pen', 'Abrindo edição do imóvel...')" class="btn-edit-full" style="text-decoration: none;">
+                                <i class="fa-solid fa-pen"></i> Editar
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- CARD 3 -->
+                <article class="property-card" id="card-3">
+                    <div class="property-image-box">
+                        <img src="duplex.jpg" alt="Cobertura Duplex Luxo">
+                        <span class="price-tag">R$ 520 / noite</span>
+                    </div>
+                    <div class="property-info">
+                        <h3>Cobertura Duplex Luxo</h3>
+                        <p class="property-location"><i class="fa-solid fa-location-dot"></i> Jurerê Internacional, Florianópolis</p>
+                        <div class="property-specs">
+                            <span><i class="fa-solid fa-bed"></i> 4 Quartos</span>
+                            <span><i class="fa-solid fa-bath"></i> 3 Banheiros</span>
+                        </div>
+                        <div class="card-buttons">
+                            <a href="editar-imovel.html?id=3" onclick="abrirComAnimacao(event, this.href, 'fa-pen', 'Abrindo edição do imóvel...')" class="btn-edit-full" style="text-decoration: none;">
+                                <i class="fa-solid fa-pen"></i> Editar
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- BOTÃO ABAIXO DOS IMÓVEIS -->
+            <div class="add-property-container">
+                <a href="adicionar-imovel.html" onclick="abrirComAnimacao(event, this.href, 'fa-house-medical', 'Abrindo cadastro de imóvel...')" class="btn-add-global" style="text-decoration: none;">
+                    <i class="fa-solid fa-plus"></i> Adicionar novo imóvel
+                </a>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- 🔔 POP-UP DE NOTIFICAÇÕES (CANTO SUPERIOR DIREITO) -->
+    <!-- ======================================================= -->
+    <div class="notifications-popup" id="notificationsPopup">
+        <div class="notif-header">
+            <h3>Solicitações de Aluguel</h3>
+            <button class="btn-close-notif" onclick="toggleNotificationsModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="notif-body" id="notifBody">
+            
+            <!-- SOLICITAÇÃO 1 -->
+            <div class="notif-item" id="notif-1">
+                <div class="notif-user-info">
+                    <div class="notif-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="notif-details">
+                        <h4>Mariana Silva</h4>
+                        <p class="notif-property">Apartamento Vista Mar</p>
+                        <span class="notif-date"><i class="fa-regular fa-calendar"></i> 15 Dez - 20 Dez (5 noites)</span>
+                        <span class="notif-price">Total: R$ 1.750</span>
+                    </div>
+                </div>
+                <div class="notif-actions" id="actions-notif-1">
+                    <button class="btn-reject" onclick="handleRequest(1, false)">
+                        <i class="fa-solid fa-xmark"></i> Recusar
+                    </button>
+                    <button class="btn-accept" onclick="handleRequest(1, true)">
+                        <i class="fa-solid fa-check"></i> Aceitar
+                    </button>
+                </div>
+            </div>
+
+            <!-- SOLICITAÇÃO 2 -->
+            <div class="notif-item" id="notif-2">
+                <div class="notif-user-info">
+                    <div class="notif-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="notif-details">
+                        <h4>Carlos Eduardo</h4>
+                        <p class="notif-property">Cobertura Duplex Luxo</p>
+                        <span class="notif-date"><i class="fa-regular fa-calendar"></i> 28 Dez - 02 Jan (5 noites)</span>
+                        <span class="notif-price">Total: R$ 2.600</span>
+                    </div>
+                </div>
+                <div class="notif-actions" id="actions-notif-2">
+                    <button class="btn-reject" onclick="handleRequest(2, false)">
+                        <i class="fa-solid fa-xmark"></i> Recusar
+                    </button>
+                    <button class="btn-accept" onclick="handleRequest(2, true)">
+                        <i class="fa-solid fa-check"></i> Aceitar
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPT DE FUNCIONAMENTO E ANIMAÇÃO DE TRANSIÇÃO -->
+    <script>
+        let activeNotifs = 2;
+
+        function abrirComAnimacao(event, url, iconClass, texto) {
+            event.preventDefault();
+            const overlay = document.getElementById('transitionOverlay');
+            const icon = document.getElementById('transitionIcon');
+            const label = document.getElementById('transitionText');
+
+            icon.className = `fa-solid ${iconClass}`;
+            label.textContent = texto;
+            overlay.classList.add('active');
+
+            setTimeout(() => {
+                window.open(url, '_blank', 'noopener,noreferrer');
+                setTimeout(() => {
+                    overlay.classList.remove('active');
+                }, 250);
+            }, 340);
+        }
+
+        function toggleNotificationsModal() {
+            const popup = document.getElementById('notificationsPopup');
+            popup.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('notificationsPopup');
+            const btn = document.getElementById('notifBtn');
+            if (popup.classList.contains('active') && !popup.contains(event.target) && !btn.contains(event.target)) {
+                popup.classList.remove('active');
+            }
+        });
+
+        function handleRequest(id, isAccepted) {
+            const actionsDiv = document.getElementById(`actions-notif-${id}`);
+            const item = document.getElementById(`notif-${id}`);
+
+            if (isAccepted) {
+                actionsDiv.innerHTML = `<span class="status-accepted"><i class="fa-solid fa-check-circle"></i> Solicitação Aceita</span>`;
+            } else {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    item.remove();
+                    checkEmptyState();
+                }, 300);
+            }
+
+            activeNotifs = Math.max(0, activeNotifs - 1);
+            const badge = document.getElementById('badgeCount');
+            if (activeNotifs > 0) {
+                badge.innerText = activeNotifs;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function checkEmptyState() {
+            const body = document.getElementById('notifBody');
+            if (body.children.length === 0) {
+                body.innerHTML = `<div class="notif-empty"><i class="fa-regular fa-bell-slash"></i><p>Nenhuma notificação pendente.</p></div>`;
+            }
+        }
+
+        function atualizarDadosPainel() {
+            const perfilSalvo = localStorage.getItem('roomatch_perfil_anfitriao');
+            if (perfilSalvo) {
+                const perfil = JSON.parse(perfilSalvo);
+                if (perfil.nome) document.getElementById('hostDisplayName').textContent = perfil.nome;
+                if (perfil.cidade) document.getElementById('hostDisplayCity').innerHTML = `<i class="fa-solid fa-location-dot"></i> ${perfil.cidade}`;
+                if (perfil.foto) {
+                    document.getElementById('headerAvatarImg').src = perfil.foto;
+                    document.getElementById('mainAvatarImg').src = perfil.foto;
+                }
+            }
+
+            [1, 2, 3].forEach(id => {
+                const savedData = localStorage.getItem(`roomatch_imovel_${id}`);
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    const card = document.getElementById(`card-${id}`);
+                    if (card) {
+                        card.querySelector('h3').textContent = data.titulo;
+                        card.querySelector('.price-tag').textContent = `R$ ${data.preco} / noite`;
+                        card.querySelector('.property-location').innerHTML = `<i class="fa-solid fa-location-dot"></i> ${data.localizacao}`;
+                        card.querySelector('.property-specs').innerHTML = `
+                            <span><i class="fa-solid fa-bed"></i> ${data.quartos} ${data.quartos == 1 ? 'Quarto' : 'Quartos'}</span>
+                            <span><i class="fa-solid fa-bath"></i> ${data.banheiros} ${data.banheiros == 1 ? 'Banheiro' : 'Banheiros'}</span>
+                        `;
+                        if (data.imagem) {
+                            card.querySelector('img').src = data.imagem;
+                        }
+                    }
+                }
+            });
+
+            const grid = document.getElementById('propertiesGrid');
+            document.querySelectorAll('.dynamic-property-card').forEach(el => el.remove());
+
+            const novosImoveis = JSON.parse(localStorage.getItem('roomatch_novos_imoveis') || '[]');
+            novosImoveis.forEach(imovel => {
+                const article = document.createElement('article');
+                article.className = 'property-card dynamic-property-card';
+                article.id = `card-${imovel.id}`;
+                article.innerHTML = `
+                    <div class="property-image-box">
+                        <img src="${imovel.imagem || 'beira mar.jpg'}" alt="${imovel.titulo}">
+                        <span class="price-tag">R$ ${imovel.preco} / noite</span>
+                    </div>
+                    <div class="property-info">
+                        <h3>${imovel.titulo}</h3>
+                        <p class="property-location"><i class="fa-solid fa-location-dot"></i> ${imovel.localizacao}</p>
+                        <div class="property-specs">
+                            <span><i class="fa-solid fa-bed"></i> ${imovel.quartos} ${imovel.quartos == 1 ? 'Quarto' : 'Quartos'}</span>
+                            <span><i class="fa-solid fa-bath"></i> ${imovel.banheiros} ${imovel.banheiros == 1 ? 'Banheiro' : 'Banheiros'}</span>
+                        </div>
+                        <div class="card-buttons">
+                            <a href="editar-imovel.html?id=${imovel.id}" onclick="abrirComAnimacao(event, this.href, 'fa-pen', 'Abrindo edição do imóvel...')" class="btn-edit-full" style="text-decoration: none;">
+                                <i class="fa-solid fa-pen"></i> Editar
+                            </a>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(article);
+            });
+
+            const total = 12 + novosImoveis.length;
+            document.getElementById('totalImoveisCount').textContent = `${total} Imóveis`;
+            document.getElementById('ativosPillCount').textContent = `${total} ativos`;
+        }
+
+        window.addEventListener('DOMContentLoaded', atualizarDadosPainel);
+        window.addEventListener('storage', atualizarDadosPainel);
+    </script>
 </body>
 </html>

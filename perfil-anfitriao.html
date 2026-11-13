@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Minha Conta Anfitrião</title>
+    
+    <!-- FONTE E ÍCONES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="anfitriao.css">
+
+    <style>
+        .profile-page-container {
+            width: 100%;
+            max-width: 1020px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin: 10px auto;
+        }
+
+        .profile-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-pill-back {
+            background: #FFFFFF;
+            color: #1A202C;
+            border: 1px solid rgba(45, 74, 62, 0.12);
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s ease;
+        }
+
+        .btn-pill-back:hover {
+            background: #2D4A3E;
+            color: #FFFFFF;
+            transform: translateX(-3px);
+        }
+
+        .account-badge-pill {
+            background: #FFFFFF;
+            color: #4A5568;
+            border: 1px solid rgba(45, 74, 62, 0.12);
+            padding: 9px 18px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .profile-content-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 840px) {
+            .profile-content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-summary-card {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 36px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            animation: cardStagger 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+        }
+
+        .avatar-edit-wrapper {
+            position: relative;
+            width: 124px;
+            height: 124px;
+            margin-bottom: 18px;
+        }
+
+        .avatar-edit-wrapper img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #F4F8F5;
+            box-shadow: 0 6px 18px rgba(45, 74, 62, 0.14);
+            transition: transform 0.3s ease;
+        }
+
+        .avatar-edit-wrapper:hover img {
+            transform: scale(1.03);
+        }
+
+        .btn-change-photo {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #2D4A3E;
+            color: #FFFFFF;
+            border: 3px solid #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.82rem;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.25s ease;
+        }
+
+        .btn-change-photo:hover {
+            background: #1E342B;
+            transform: scale(1.12);
+        }
+
+        .summary-name {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #1A202C;
+            margin-bottom: 4px;
+        }
+
+        .summary-email {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #718096;
+            margin-bottom: 18px;
+            word-break: break-all;
+        }
+
+        .verified-pill {
+            background: #F4F8F5;
+            color: #2D4A3E;
+            border: 1px solid rgba(45, 74, 62, 0.15);
+            padding: 7px 16px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .verified-pill i {
+            color: #3B6E52;
+        }
+
+        .profile-form-card {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 32px 36px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            animation: cardStagger 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+        }
+
+        @media (max-width: 560px) {
+            .profile-form-card {
+                padding: 24px 20px;
+            }
+        }
+
+        .form-section-title {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #1A202C;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .input-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .input-group label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #2D3748;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1.5px solid #E2E8F0;
+            background: #F9F8F3;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: #1A202C;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .profile-input:focus {
+            border-color: #2D4A3E;
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(45, 74, 62, 0.1);
+        }
+
+        .profile-input.has-icon {
+            padding-right: 42px;
+        }
+
+        .toggle-pass-btn {
+            position: absolute;
+            right: 14px;
+            background: transparent;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            font-size: 0.92rem;
+            transition: color 0.2s;
+        }
+
+        .toggle-pass-btn:hover {
+            color: #2D4A3E;
+        }
+
+        .form-footer-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+
+        .btn-save-profile {
+            background: #2D4A3E;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 26px;
+            border-radius: 999px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(45, 74, 62, 0.22);
+            transition: all 0.3s ease;
+        }
+
+        .btn-save-profile:hover {
+            background: #1E342B;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(45, 74, 62, 0.32);
+        }
+
+        .toast-profile {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #2D4A3E;
+            color: #FFFFFF;
+            padding: 14px 22px;
+            border-radius: 14px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .toast-profile.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-page-container">
+
+        <!-- BARRA SUPERIOR -->
+        <header class="profile-top-bar">
+            <button type="button" onclick="voltarParaPainel()" class="btn-pill-back">
+                <i class="fa-solid fa-arrow-left"></i> Voltar para o início
+            </button>
+            <span class="account-badge-pill">MINHA CONTA ROOMATCH</span>
+        </header>
+
+        <!-- CONTEÚDO EM DUAS COLUNAS -->
+        <main class="profile-content-grid">
+
+            <!-- COLUNA ESQUERDA: CARD DO PERFIL -->
+            <aside class="profile-summary-card">
+                <div class="avatar-edit-wrapper">
+                    <img src="perfil.anfitriao.webp" alt="Joaquín Mendes" id="profileAvatarPreview">
+                    <label for="avatarFileInput" class="btn-change-photo" title="Alterar foto de perfil">
+                        <i class="fa-solid fa-camera"></i>
+                    </label>
+                    <input type="file" id="avatarFileInput" accept="image/*" style="display: none;" onchange="trocarFotoPerfil(event)">
+                </div>
+
+                <h2 class="summary-name" id="cardDisplayName">Joaquín Mendes</h2>
+                <p class="summary-email" id="cardDisplayEmail">joaquin.mendes@roomatch.com.br</p>
+
+                <span class="verified-pill">
+                    <i class="fa-solid fa-circle-check"></i> Cadastro Verificado
+                </span>
+            </aside>
+
+            <!-- COLUNA DIREITA: FORMULÁRIO -->
+            <form class="profile-form-card" onsubmit="salvarPerfil(event)">
+                
+                <!-- SEÇÃO 1: DADOS PESSOAIS -->
+                <div>
+                    <h3 class="form-section-title">Dados Pessoais</h3>
+                    <div class="form-grid-2">
+                        <div class="input-group">
+                            <label for="nomeCompleto">Nome Completo</label>
+                            <input type="text" id="nomeCompleto" class="profile-input" value="Joaquín Mendes" oninput="atualizarPreviewCard()" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="emailUsuario">E-mail</label>
+                            <input type="email" id="emailUsuario" class="profile-input" value="joaquin.mendes@roomatch.com.br" oninput="atualizarPreviewCard()" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="telefoneUsuario">Telefone / WhatsApp</label>
+                            <input type="tel" id="telefoneUsuario" class="profile-input" value="(48) 99876-5432" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="cidadeAtuacao">Cidade de Atuação</label>
+                            <input type="text" id="cidadeAtuacao" class="profile-input" value="Florianópolis, SC" required>
+                        </div>
+
+                        <div class="input-group full-width">
+                            <label for="objetivoConta">Objetivo no RooMatch</label>
+                            <select id="objetivoConta" class="profile-input">
+                                <option value="anunciar" selected>Anunciar e gerenciar meus imóveis</option>
+                                <option value="alugar">Alugar um imóvel</option>
+                                <option value="ambos">Anunciar e alugar imóveis</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 2: SEGURANÇA E SENHA -->
+                <div>
+                    <h3 class="form-section-title">Segurança e Senha</h3>
+                    <div class="form-grid-2">
+                        <div class="input-group">
+                            <label for="novaSenha">Nova Senha</label>
+                            <div class="input-wrapper">
+                                <input type="password" id="novaSenha" class="profile-input has-icon" placeholder="Deixe em branco para manter">
+                                <button type="button" class="toggle-pass-btn" onclick="toggleSenha('novaSenha', this)" title="Mostrar/Ocultar senha">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="confirmarSenha">Confirmar Nova Senha</label>
+                            <div class="input-wrapper">
+                                <input type="password" id="confirmarSenha" class="profile-input has-icon" placeholder="Repita a nova senha">
+                                <button type="button" class="toggle-pass-btn" onclick="toggleSenha('confirmarSenha', this)" title="Mostrar/Ocultar senha">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer-actions">
+                    <button type="submit" class="btn-save-profile">
+                        <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações
+                    </button>
+                </div>
+
+            </form>
+
+        </main>
+    </div>
+
+    <!-- NOTIFICAÇÃO DE SALVO -->
+    <div class="toast-profile" id="toastProfile">
+        <i class="fa-solid fa-circle-check"></i> <span id="toastMessage">Perfil atualizado com sucesso!</span>
+    </div>
+
+    <script>
+        let fotoAtual = "perfil.anfitriao.webp";
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const salvo = localStorage.getItem("roomatch_perfil_anfitriao");
+            if (salvo) {
+                const dados = JSON.parse(salvo);
+                document.getElementById("nomeCompleto").value = dados.nome || "Joaquín Mendes";
+                document.getElementById("emailUsuario").value = dados.email || "joaquin.mendes@roomatch.com.br";
+                document.getElementById("telefoneUsuario").value = dados.telefone || "(48) 99876-5432";
+                document.getElementById("cidadeAtuacao").value = dados.cidade || "Florianópolis, SC";
+                if (dados.objetivo) document.getElementById("objetivoConta").value = dados.objetivo;
+                if (dados.foto) {
+                    fotoAtual = dados.foto;
+                    document.getElementById("profileAvatarPreview").src = dados.foto;
+                }
+                atualizarPreviewCard();
+            }
+        });
+
+        function atualizarPreviewCard() {
+            const nome = document.getElementById("nomeCompleto").value.trim() || "Joaquín Mendes";
+            const email = document.getElementById("emailUsuario").value.trim() || "joaquin.mendes@roomatch.com.br";
+            document.getElementById("cardDisplayName").textContent = nome;
+            document.getElementById("cardDisplayEmail").textContent = email;
+        }
+
+        function trocarFotoPerfil(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                fotoAtual = e.target.result;
+                document.getElementById("profileAvatarPreview").src = fotoAtual;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function toggleSenha(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector("i");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
+        function voltarParaPainel() {
+            document.body.classList.add("is-leaving");
+            setTimeout(() => {
+                window.close();
+                if (!window.closed) {
+                    window.location.href = "anfitriao.html";
+                }
+            }, 300);
+        }
+
+        function salvarPerfil(event) {
+            event.preventDefault();
+
+            const novaSenha = document.getElementById("novaSenha").value;
+            const confirmarSenha = document.getElementById("confirmarSenha").value;
+
+            if (novaSenha && novaSenha !== confirmarSenha) {
+                alert("As senhas digitadas não coincidem. Por favor, verifique.");
+                return;
+            }
+
+            const dadosPerfil = {
+                nome: document.getElementById("nomeCompleto").value.trim(),
+                email: document.getElementById("emailUsuario").value.trim(),
+                telefone: document.getElementById("telefoneUsuario").value.trim(),
+                cidade: document.getElementById("cidadeAtuacao").value.trim(),
+                objetivo: document.getElementById("objetivoConta").value,
+                foto: fotoAtual
+            };
+
+            localStorage.setItem("roomatch_perfil_anfitriao", JSON.stringify(dadosPerfil));
+
+            const toast = document.getElementById("toastProfile");
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                voltarParaPainel();
+            }, 750);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Adicionar Novo Imóvel</title>
+    
+    <!-- FONTE E ÍCONES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="anfitriao.css">
+
+    <style>
+        .add-wrapper {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 32px;
+            animation: cardStagger 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+        }
+
+        @media (max-width: 860px) {
+            .add-wrapper {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+        }
+
+        .page-title-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 4px;
+            animation: cardStagger 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+        }
+
+        .page-title-bar h1 {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: #1A202C;
+        }
+
+        .image-editor-box {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .image-preview-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #F4F8F5;
+            border: 2px dashed #CBD5E0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            transition: transform 0.4s ease;
+        }
+
+        .image-preview-container:hover img {
+            transform: scale(1.03);
+        }
+
+        .image-placeholder-msg {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: #718096;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .image-placeholder-msg i {
+            font-size: 2.2rem;
+            color: #3B6E52;
+        }
+
+        .preview-price-badge {
+            position: absolute;
+            bottom: 14px;
+            left: 14px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            backdrop-filter: blur(4px);
+        }
+
+        .upload-label-btn {
+            background: #F4F8F5;
+            color: #2D4A3E;
+            border: 1.5px dashed #2D4A3E;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+        }
+
+        .upload-label-btn:hover {
+            background: #2D4A3E;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        .add-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 500px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #2D3748;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-group label i {
+            color: #3B6E52;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 12px;
+            border: 1.5px solid #E2E8F0;
+            background: #F9F8F3;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1A202C;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: #2D4A3E;
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(45, 74, 62, 0.1);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .amenities-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .amenity-check {
+            display: none;
+        }
+
+        .amenity-pill {
+            background: #F4F8F5;
+            border: 1px solid #E2E8F0;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4A5568;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .amenity-pill:hover {
+            transform: translateY(-1px);
+            border-color: #2D4A3E;
+        }
+
+        .amenity-check:checked + .amenity-pill {
+            background: #2D4A3E;
+            color: #FFFFFF;
+            border-color: #2D4A3E;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+            padding-top: 16px;
+            border-top: 1px solid #EDF2F7;
+        }
+
+        .btn-cancel {
+            background: #F7F0E4;
+            color: #2D3748;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #EEDCC8;
+            transform: translateY(-2px);
+        }
+
+        .btn-publish {
+            flex: 1;
+            background: #2D4A3E;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-publish:hover {
+            background: #1E342B;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(45, 74, 62, 0.28);
+        }
+
+        .toast-saved {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #2D4A3E;
+            color: #FFFFFF;
+            padding: 14px 22px;
+            border-radius: 14px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .toast-saved.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- CABEÇALHO -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button type="button" onclick="fecharAbaCadastro()" class="btn-back" title="Fechar aba e voltar ao Painel" style="border: none; cursor: pointer;">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div class="brand-logo">
+                    <img src="logo.png" alt="RooMatch" class="header-logo">
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="user-avatar-small">
+                    <img src="perfil.anfitriao.webp" alt="Joaquín Mendes">
+                </div>
+            </div>
+        </header>
+
+        <div class="page-title-bar">
+            <h1>Adicionar Novo Imóvel</h1>
+        </div>
+
+        <!-- CARD PRINCIPAL DE CADASTRO -->
+        <main class="add-wrapper">
+            
+            <!-- ESQUERDA: FOTO DO NOVO IMÓVEL -->
+            <div class="image-editor-box">
+                <label style="font-size: 0.85rem; font-weight: 700; color: #2D3748;">
+                    <i class="fa-regular fa-image" style="color: #3B6E52;"></i> Foto Principal da Acomodação
+                </label>
+                
+                <div class="image-preview-container">
+                    <div class="image-placeholder-msg" id="placeholderMsg">
+                        <i class="fa-regular fa-images"></i>
+                        <span>Nenhuma foto selecionada ainda</span>
+                    </div>
+                    <img id="previewImg" src="" alt="Pré-visualização do novo imóvel">
+                    <span class="preview-price-badge" id="previewPrice">R$ 300 / noite</span>
+                </div>
+
+                <label for="fileInput" class="upload-label-btn">
+                    <i class="fa-solid fa-camera"></i> Escolher foto do dispositivo
+                </label>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="previewUploadedImage(event)">
+
+                <div class="form-group">
+                    <label for="imageUrl"><i class="fa-solid fa-link"></i> Ou cole o caminho/URL da imagem</label>
+                    <input type="text" id="imageUrl" class="form-control" placeholder="Ex: beira mar.jpg" oninput="updateImageFromUrl(this.value)">
+                </div>
+            </div>
+
+            <!-- DIREITA: DADOS DO NOVO IMÓVEL -->
+            <form class="add-form" id="addPropertyForm" onsubmit="createProperty(event)">
+                
+                <div class="form-group">
+                    <label for="titulo"><i class="fa-solid fa-house"></i> Título do Anúncio</label>
+                    <input type="text" id="titulo" class="form-control" placeholder="Ex: Casa Frente Mar com Piscina" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="localizacao"><i class="fa-solid fa-location-dot"></i> Localização (Bairro, Cidade)</label>
+                        <input type="text" id="localizacao" class="form-control" placeholder="Ex: Campeche, Florianópolis" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="preco"><i class="fa-solid fa-tag"></i> Valor da Diária (R$)</label>
+                        <input type="number" id="preco" class="form-control" value="300" min="1" required oninput="updatePriceBadge(this.value)">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quartos"><i class="fa-solid fa-bed"></i> Quantidade de Quartos</label>
+                        <input type="number" id="quartos" class="form-control" value="2" min="1" max="20" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="banheiros"><i class="fa-solid fa-bath"></i> Quantidade de Banheiros</label>
+                        <input type="number" id="banheiros" class="form-control" value="1" min="1" max="20" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao"><i class="fa-solid fa-align-left"></i> Descrição da Acomodação</label>
+                    <textarea id="descricao" class="form-control" placeholder="Descreva os diferenciais, vista, proximidade da praia ou pontos turísticos..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fa-solid fa-sparkles"></i> Comodidades Disponíveis</label>
+                    <div class="amenities-grid">
+                        <label>
+                            <input type="checkbox" class="amenity-check" id="com-wifi" checked>
+                            <span class="amenity-pill"><i class="fa-solid fa-wifi"></i> Wi-Fi Rápido</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" class="amenity-check" id="com-piscina">
+                            <span class="amenity-pill"><i class="fa-solid fa-water-ladder"></i> Piscina</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" class="amenity-check" id="com-ar" checked>
+                            <span class="amenity-pill"><i class="fa-solid fa-snowflake"></i> Ar-condicionado</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" class="amenity-check" id="com-garagem">
+                            <span class="amenity-pill"><i class="fa-solid fa-car"></i> Estacionamento</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" class="amenity-check" id="com-pet">
+                            <span class="amenity-pill"><i class="fa-solid fa-paw"></i> Aceita Pets</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" onclick="fecharAbaCadastro()" class="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn-publish">
+                        <i class="fa-solid fa-plus"></i> Publicar Imóvel
+                    </button>
+                </div>
+
+            </form>
+        </main>
+    </div>
+
+    <!-- NOTIFICAÇÃO DE PUBLICADO -->
+    <div class="toast-saved" id="toastSaved">
+        <i class="fa-solid fa-circle-check"></i> Novo imóvel publicado! Fechando aba...
+    </div>
+
+    <script>
+        let imagemSelecionada = "";
+
+        function mostrarImagem(src) {
+            const img = document.getElementById("previewImg");
+            const placeholder = document.getElementById("placeholderMsg");
+            if (src && src.trim() !== "") {
+                img.src = src;
+                img.style.display = "block";
+                placeholder.style.display = "none";
+                imagemSelecionada = src;
+            } else {
+                img.style.display = "none";
+                placeholder.style.display = "flex";
+                imagemSelecionada = "";
+            }
+        }
+
+        function updatePriceBadge(valor) {
+            document.getElementById("previewPrice").textContent = `R$ ${valor || 0} / noite`;
+        }
+
+        function updateImageFromUrl(url) {
+            mostrarImagem(url);
+        }
+
+        function previewUploadedImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Img = e.target.result;
+                document.getElementById("imageUrl").value = base64Img;
+                mostrarImagem(base64Img);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function fecharAbaCadastro() {
+            document.body.classList.add("is-leaving");
+            setTimeout(() => {
+                window.close();
+                if (!window.closed) {
+                    window.location.href = "anfitriao.html";
+                }
+            }, 300);
+        }
+
+        function createProperty(event) {
+            event.preventDefault();
+
+            const novoImovel = {
+                id: Date.now(),
+                titulo: document.getElementById("titulo").value,
+                localizacao: document.getElementById("localizacao").value,
+                preco: document.getElementById("preco").value,
+                quartos: document.getElementById("quartos").value,
+                banheiros: document.getElementById("banheiros").value,
+                descricao: document.getElementById("descricao").value,
+                imagem: imagemSelecionada || "beira mar.jpg"
+            };
+
+            const novos = JSON.parse(localStorage.getItem("roomatch_novos_imoveis") || "[]");
+            novos.push(novoImovel);
+            localStorage.setItem("roomatch_novos_imoveis", JSON.stringify(novos));
+
+            const toast = document.getElementById("toastSaved");
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                fecharAbaCadastro();
+            }, 750);
+        }
+    </script>
+</body>
+</html>

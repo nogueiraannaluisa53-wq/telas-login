@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Editar Imóvel</title>
+    
+    <!-- FONTE E ÍCONES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="anfitriao.css">
+
+    <style>
+        .edit-wrapper {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 32px;
+            animation: cardStagger 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+        }
+
+        @media (max-width: 860px) {
+            .edit-wrapper {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+        }
+
+        .page-title-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 4px;
+            animation: cardStagger 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+        }
+
+        .page-title-bar h1 {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: #1A202C;
+        }
+
+        .image-editor-box {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .image-preview-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #F4F8F5;
+            border: 2px dashed #CBD5E0;
+        }
+
+        .image-preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .image-preview-container:hover img {
+            transform: scale(1.03);
+        }
+
+        .preview-price-badge {
+            position: absolute;
+            bottom: 14px;
+            left: 14px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            backdrop-filter: blur(4px);
+        }
+
+        .upload-label-btn {
+            background: #F4F8F5;
+            color: #2D4A3E;
+            border: 1.5px dashed #2D4A3E;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+        }
+
+        .upload-label-btn:hover {
+            background: #2D4A3E;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 500px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #2D3748;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-group label i {
+            color: #3B6E52;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 12px;
+            border: 1.5px solid #E2E8F0;
+            background: #F9F8F3;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1A202C;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: #2D4A3E;
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(45, 74, 62, 0.1);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .amenities-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .amenity-check {
+            display: none;
+        }
+
+        .amenity-pill {
+            background: #F4F8F5;
+            border: 1px solid #E2E8F0;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4A5568;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .amenity-pill:hover {
+            transform: translateY(-1px);
+            border-color: #2D4A3E;
+        }
+
+        .amenity-check:checked + .amenity-pill {
+            background: #2D4A3E;
+            color: #FFFFFF;
+            border-color: #2D4A3E;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+            padding-top: 16px;
+            border-top: 1px solid #EDF2F7;
+        }
+
+        .btn-cancel {
+            background: #F7F0E4;
+            color: #2D3748;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #EEDCC8;
+            transform: translateY(-2px);
+        }
+
+        .btn-save {
+            flex: 1;
+            background: #2D4A3E;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            background: #1E342B;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(45, 74, 62, 0.28);
+        }
+
+        .toast-saved {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #2D4A3E;
+            color: #FFFFFF;
+            padding: 14px 22px;
+            border-radius: 14px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .toast-saved.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- CABEÇALHO -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button type="button" onclick="fecharAbaEdicao()" class="btn-back" title="Fechar aba e voltar ao Painel" style="border: none; cursor: pointer;">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div class="brand-logo">
+                    <img src="logo.png" alt="RooMatch" class="header-logo">
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="user-avatar-small">
+                    <img src="perfil.anfitriao.webp" alt="Joaquín Mendes">
+                </div>
+            </div>
+        </header>
+
+        <div class="page-title-bar">
+            <h1>Editar Informações do Imóvel</h1>
+        </div>
+
+        <!-- CARD PRINCIPAL DE EDIÇÃO -->
+        <main class="edit-wrapper">
+            
+            <!-- ESQUERDA: PRÉVIA E ALTERAÇÃO DA IMAGEM -->
+            <div class="image-editor-box">
+                <label style="font-size: 0.85rem; font-weight: 700; color: #2D3748;">
+                    <i class="fa-regular fa-image" style="color: #3B6E52;"></i> Foto Principal da Acomodação
+                </label>
+                
+                <div class="image-preview-container">
+                    <img id="previewImg" src="beira mar.jpg" alt="Pré-visualização do imóvel">
+                    <span class="preview-price-badge" id="previewPrice">R$ 350 / noite</span>
+                </div>
+
+                <label for="fileInput" class="upload-label-btn">
+                    <i class="fa-solid fa-camera"></i> Escolher nova foto do dispositivo
+                </label>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="previewUploadedImage(event)">
+
+                <div class="form-group">
+                    <label for="imageUrl"><i class="fa-solid fa-link"></i> Ou cole o caminho/URL da imagem</label>
+                    <input type="text" id="imageUrl" class="form-control" placeholder="Ex: beira mar.jpg" oninput="updateImageFromUrl(this.value)">
+                </div>
+            </div>
+
+            <!-- DIREITA: DADOS DO IMÓVEL -->
+            <form class="edit-form" id="editPropertyForm" onsubmit="saveProperty(event)">
+                
+                <div class="form-group">
+                    <label for="titulo"><i class="fa-solid fa-house"></i> Título do Anúncio</label>
+                    <input type="text" id="titulo" class="form-control" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="localizacao"><i class="fa-solid fa-location-dot"></i> Localização (Bairro, Cidade)</label>
+                        <input type="text" id="localizacao" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="preco"><i class="fa-solid fa-tag"></i> Valor da Diária (R$)</label>
+                        <input type="number" id="preco" class="form-control" min="1" required oninput="updatePriceBadge(this.value)">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quartos"><i class="fa-solid fa-bed"></i> Quantidade de Quartos</label>
+                        <input type="number" id="quartos" class="form-control" min="1" max="20" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="banheiros"><i class="fa-solid fa-bath"></i> Quantidade de Banheiros</label>
+                        <input type="number" id="banheiros" class="form-control" min="1" max="20" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao"><i class="fa-solid fa-align-left"></i> Descrição da Acomodação</label>
+                    <textarea id="descricao" class="form-control" placeholder="Descreva os diferenciais, vista, proximidade da praia ou pontos turísticos..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fa-solid fa-sparkles"></i> Comodidades Disponíveis</label>
+                    <div class="amenities-grid">
+                        <label>
+                            <input type="checkbox" class="amenity-check" id="com-wifi" checked>
+                            <span class="amenity-pill"><i class="fa-solid fa-wifi"></i> Wi-Fi Rápido</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" class="amenity-check" id="com-piscina" checked>
+                            <span class="amenity-pill"><i class="fa-solid fa-water-ladder"></i> Piscina</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" class="amenity-check" id="com-ar" checked>
+                            <span class="amenity-pill"><i class="fa-solid fa-snowflake"></i> Ar-condicionado</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" class="amenity-check" id="com-garagem">
+                            <span class="amenity-pill"><i class="fa-solid fa-car"></i> Estacionamento</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" class="amenity-check" id="com-pet">
+                            <span class="amenity-pill"><i class="fa-solid fa-paw"></i> Aceita Pets</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" onclick="fecharAbaEdicao()" class="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn-save">
+                        <i class="fa-solid fa-check"></i> Salvar Alterações
+                    </button>
+                </div>
+
+            </form>
+        </main>
+    </div>
+
+    <!-- NOTIFICAÇÃO DE SALVO -->
+    <div class="toast-saved" id="toastSaved">
+        <i class="fa-solid fa-circle-check"></i> Alterações salvas! Fechando aba...
+    </div>
+
+    <script>
+        const imoveisPadrao = {
+            "1": {
+                titulo: "Apartamento Vista Mar",
+                localizacao: "Beira Mar Norte, Florianópolis",
+                preco: 350,
+                quartos: 2,
+                banheiros: 1,
+                imagem: "beira mar.jpg",
+                descricao: "Apartamento moderno com vista panorâmica para o mar, piscina infinita no condomínio e acesso direto à Avenida Beira-Mar Norte."
+            },
+            "2": {
+                titulo: "Refúgio Aconchegante no Campo",
+                localizacao: "Lagoa da Conceição, Florianópolis",
+                preco: 290,
+                quartos: 3,
+                banheiros: 2,
+                imagem: "anfitriao.1.2.webp",
+                descricao: "Ambiente espaçoso e acolhedor cercado pela natureza na Lagoa da Conceição, ideal para famílias e estadias tranquilas."
+            },
+            "3": {
+                titulo: "Cobertura Duplex Luxo",
+                localizacao: "Jurerê Internacional, Florianópolis",
+                preco: 520,
+                quartos: 4,
+                banheiros: 3,
+                imagem: "duplex.jpg",
+                descricao: "Cobertura duplex de alto padrão em Jurerê Internacional, com sala ampla, acabamentos sofisticados e a poucos metros da praia."
+            }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const imovelId = params.get("id") || "1";
+
+        window.addEventListener("DOMContentLoaded", () => {
+            let dados = null;
+            const saved = localStorage.getItem(`roomatch_imovel_${imovelId}`);
+            if (saved) {
+                dados = JSON.parse(saved);
+            } else if (imoveisPadrao[imovelId]) {
+                dados = imoveisPadrao[imovelId];
+            } else {
+                const novos = JSON.parse(localStorage.getItem("roomatch_novos_imoveis") || "[]");
+                dados = novos.find(item => String(item.id) === String(imovelId)) || imoveisPadrao["1"];
+            }
+
+            document.getElementById("titulo").value = dados.titulo;
+            document.getElementById("localizacao").value = dados.localizacao;
+            document.getElementById("preco").value = dados.preco;
+            document.getElementById("quartos").value = dados.quartos;
+            document.getElementById("banheiros").value = dados.banheiros;
+            document.getElementById("descricao").value = dados.descricao || "";
+            document.getElementById("imageUrl").value = dados.imagem;
+            document.getElementById("previewImg").src = dados.imagem;
+            updatePriceBadge(dados.preco);
+        });
+
+        function updatePriceBadge(valor) {
+            document.getElementById("previewPrice").textContent = `R$ ${valor || 0} / noite`;
+        }
+
+        function updateImageFromUrl(url) {
+            if (url.trim() !== "") {
+                document.getElementById("previewImg").src = url;
+            }
+        }
+
+        function previewUploadedImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Img = e.target.result;
+                document.getElementById("previewImg").src = base64Img;
+                document.getElementById("imageUrl").value = base64Img;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function fecharAbaEdicao() {
+            document.body.classList.add("is-leaving");
+            setTimeout(() => {
+                window.close();
+                if (!window.closed) {
+                    window.location.href = "anfitriao.html";
+                }
+            }, 300);
+        }
+
+        function saveProperty(event) {
+            event.preventDefault();
+
+            const dadosAtualizados = {
+                titulo: document.getElementById("titulo").value,
+                localizacao: document.getElementById("localizacao").value,
+                preco: document.getElementById("preco").value,
+                quartos: document.getElementById("quartos").value,
+                banheiros: document.getElementById("banheiros").value,
+                descricao: document.getElementById("descricao").value,
+                imagem: document.getElementById("previewImg").src
+            };
+
+            if (imoveisPadrao[imovelId]) {
+                localStorage.setItem(`roomatch_imovel_${imovelId}`, JSON.stringify(dadosAtualizados));
+            } else {
+                const novos = JSON.parse(localStorage.getItem("roomatch_novos_imoveis") || "[]");
+                const index = novos.findIndex(item => String(item.id) === String(imovelId));
+                if (index !== -1) {
+                    dadosAtualizados.id = novos[index].id;
+                    novos[index] = dadosAtualizados;
+                    localStorage.setItem("roomatch_novos_imoveis", JSON.stringify(novos));
+                }
+            }
+
+            const toast = document.getElementById("toastSaved");
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                fecharAbaEdicao();
+            }, 750);
+        }
+    </script>
+</body>
+</html>

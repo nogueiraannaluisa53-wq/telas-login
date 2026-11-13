@@ -3,221 +3,928 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOMATCH - Login</title>
-    <!-- Ícones FontAwesome -->
+    <title>RooMatch - Acesso</title>
+    
+    <!-- FONTE E ÍCONES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="login.css">
+    
+    <!-- CSS GLOBAL DE PALETA E ANIMAÇÕES -->
+    <link rel="stylesheet" href="anfitriao.css">
+
+    <style>
+        body {
+            background-color: #F9F8F3;
+            min-height: 100vh;
+            padding: 28px 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 18px;
+            }
+        }
+
+        /* =======================================================
+           1. CABEÇALHO SUPERIOR (LOGO + ALTERNADOR DE PERFIL)
+           ======================================================= */
+        .top-navbar {
+            width: 100%;
+            max-width: 1320px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: pageEnter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .top-logo img {
+            height: 58px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .top-logo img:hover {
+            transform: scale(1.04);
+        }
+
+        .btn-host-switch {
+            background: #EAE6DC;
+            color: #2D3748;
+            border: 1.5px solid transparent;
+            padding: 12px 26px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        .btn-host-switch:hover {
+            background: #2D4A3E;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(45, 74, 62, 0.22);
+        }
+
+        .btn-host-switch.is-host-mode {
+            background: #2D4A3E;
+            color: #FFFFFF;
+            box-shadow: 0 6px 16px rgba(45, 74, 62, 0.22);
+        }
+
+        .btn-host-switch.is-host-mode:hover {
+            background: #1E342B;
+        }
+
+        /* =======================================================
+           2. ÁREA CENTRAL (BALÃO SOBREPOSTO + FOTO DO APARTAMENTO)
+           ======================================================= */
+        .hero-auth-wrapper {
+            width: 100%;
+            max-width: 1220px;
+            margin: auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 20px 0;
+        }
+
+        .hero-image-panel {
+            width: 74%;
+            height: 530px;
+            border-radius: 26px;
+            overflow: hidden;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+            animation: pageEnter 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+        }
+
+        .hero-image-panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* BALÃO FLUTUANTE À ESQUERDA (SOBREPOSTO À IMAGEM) */
+        .floating-auth-balloon {
+            position: absolute;
+            left: 3%;
+            width: 375px;
+            max-width: 92vw;
+            min-height: 470px;
+            background: rgba(235, 233, 226, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 28px;
+            padding: 30px 28px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.09);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            animation: cardStagger 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @media (max-width: 960px) {
+            .hero-auth-wrapper {
+                justify-content: center;
+            }
+            .hero-image-panel {
+                display: none;
+            }
+            .floating-auth-balloon {
+                position: relative;
+                left: auto;
+                width: 100%;
+                max-width: 410px;
+            }
+        }
+
+        /* =======================================================
+           3. CONTEÚDO INTERNO DO BALÃO (LOGIN / CADASTRO / RECUPERAR)
+           ======================================================= */
+        .balloon-view {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .balloon-view.active {
+            display: flex;
+            animation: balloonSwap 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes balloonSwap {
+            0% {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* BADGE INDICADORA DE MODO (HÓSPEDE / ANFITRIÃO) */
+        .mode-indicator-tag {
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.9px;
+            text-transform: uppercase;
+            color: #2D4A3E;
+            background: #F4F8F5;
+            padding: 4px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(45, 74, 62, 0.16);
+            transition: all 0.3s ease;
+        }
+
+        /* ABAS SUPERIORES DO BALÃO (LOG-IN / CADASTRAR-SE) */
+        .balloon-tabs {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .balloon-tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1A202C;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .balloon-tab-btn.active {
+            background: #DFDCD2;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        /* AVATAR CIRCULAR ESCURO */
+        .balloon-avatar-circle {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            background: #2D3739;
+            color: #F9F8F3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.1rem;
+            margin: 2px 0;
+            box-shadow: 0 6px 16px rgba(45, 55, 57, 0.18);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .balloon-avatar-circle.host-active {
+            background: #2D4A3E;
+            transform: scale(1.04);
+        }
+
+        .balloon-subtitle {
+            font-size: 0.83rem;
+            font-weight: 600;
+            color: #2D3748;
+            text-align: center;
+            line-height: 1.45;
+            max-width: 270px;
+            margin-bottom: 2px;
+        }
+
+        /* CAMPOS DE INPUT PÍLULA */
+        .balloon-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .pill-input-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .pill-input-wrapper i.left-icon {
+            position: absolute;
+            left: 16px;
+            color: #718096;
+            font-size: 0.86rem;
+        }
+
+        .balloon-pill-input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border-radius: 999px;
+            border: 1.5px solid transparent;
+            background: #F4F3EE;
+            font-size: 0.84rem;
+            font-weight: 500;
+            color: #1A202C;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .balloon-pill-input::placeholder {
+            color: #8C8B84;
+        }
+
+        .balloon-pill-input:focus {
+            background: #FFFFFF;
+            border-color: #2D4A3E;
+            box-shadow: 0 0 0 3px rgba(45, 74, 62, 0.12);
+        }
+
+        .toggle-eye-btn {
+            position: absolute;
+            right: 14px;
+            background: transparent;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        /* BOTÃO PRINCIPAL */
+        .btn-balloon-submit {
+            align-self: center;
+            margin-top: 6px;
+            background: #7D9575;
+            color: #1A202C;
+            border: none;
+            padding: 11px 38px;
+            border-radius: 999px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(125, 149, 117, 0.28);
+            transition: all 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .btn-balloon-submit:hover {
+            background: #2D4A3E;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(45, 74, 62, 0.28);
+        }
+
+        .btn-balloon-submit:active {
+            transform: scale(0.96);
+        }
+
+        .btn-balloon-submit.full-btn {
+            width: 100%;
+            padding: 12px 20px;
+        }
+
+        .link-forgot-trigger {
+            background: none;
+            border: none;
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: #5A6260;
+            cursor: pointer;
+            margin-top: 2px;
+            transition: color 0.2s ease;
+        }
+
+        .link-forgot-trigger:hover {
+            color: #2D4A3E;
+            text-decoration: underline;
+        }
+
+        /* =======================================================
+           4. ESTÉTICA DE "ESQUECI MINHA SENHA" NO BALÃO
+           ======================================================= */
+        .recovery-balloon-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-mini-back {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #F4F3EE;
+            border: none;
+            color: #2D3748;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.25s ease;
+        }
+
+        .btn-mini-back:hover {
+            background: #2D4A3E;
+            color: #FFFFFF;
+            transform: translateX(-2px);
+        }
+
+        .recovery-icon-badge {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: #F4F8F5;
+            color: #2D4A3E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            border: 1.5px solid rgba(45, 74, 62, 0.16);
+            box-shadow: 0 4px 12px rgba(45, 74, 62, 0.08);
+        }
+
+        .recovery-balloon-title {
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: #1A202C;
+            text-align: center;
+        }
+
+        .recovery-balloon-desc {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #4A5568;
+            text-align: center;
+            line-height: 1.45;
+            margin-top: -6px;
+        }
+
+        .steps-dots-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .r-dot {
+            width: 22px;
+            height: 4px;
+            border-radius: 999px;
+            background: #D2CFC4;
+            transition: all 0.3s ease;
+        }
+
+        .r-dot.active {
+            width: 36px;
+            background: #2D4A3E;
+        }
+
+        .rec-substep {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rec-substep.active {
+            display: flex;
+            animation: balloonSwap 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .code-grid-6 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            width: 100%;
+        }
+
+        .code-digit-input {
+            width: 100%;
+            height: 42px;
+            text-align: center;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #1A202C;
+            border-radius: 12px;
+            border: 1.5px solid transparent;
+            background: #F4F3EE;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .code-digit-input:focus {
+            background: #FFFFFF;
+            border-color: #2D4A3E;
+            box-shadow: 0 0 0 3px rgba(45, 74, 62, 0.12);
+        }
+
+        .resend-small-text {
+            text-align: center;
+            font-size: 0.76rem;
+            color: #5A6260;
+        }
+
+        .resend-small-text button {
+            background: none;
+            border: none;
+            color: #2D4A3E;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .toast-balloon {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #2D4A3E;
+            color: #FFFFFF;
+            padding: 13px 20px;
+            border-radius: 14px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .toast-balloon.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
 
-    <main class="container">
-        <!-- CABEÇALHO -->
-        <header class="header">
-            <div class="logo-container">
-                <!-- Seta para voltar para telas de usuário comum (escondida por padrão) -->
-                <button id="btn-back" class="btn-back hidden" onclick="mostrarTela('login')" title="Voltar ao início">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
-                <div class="logo">
-                    <img src="logo.png" alt="ROOMATCH Logo" class="logo-img">
+    <!-- 1. CABEÇALHO SUPERIOR -->
+    <header class="top-navbar">
+        <a href="home.html" class="top-logo">
+            <img src="logo.png" alt="RooMatch">
+        </a>
+
+        <button type="button" class="btn-host-switch" id="btnSwitchRole" onclick="alternarPerfilAcesso()">
+            <i class="fa-solid fa-house-user" id="switchRoleIcon"></i>
+            <span id="switchRoleText">Entrar como Anfitrião</span>
+        </button>
+    </header>
+
+    <!-- 2. CONTAINER PRINCIPAL (BALÃO SOBREPOSTO + IMAGEM À DIREITA) -->
+    <main class="hero-auth-wrapper">
+
+        <!-- BALÃO FLUTUANTE À ESQUERDA -->
+        <section class="floating-auth-balloon" id="authBalloon">
+
+            <!-- ===================================================
+                 VISÃO A: LOG-IN & CADASTRAR-SE (HÓSPEDE OU ANFITRIÃO)
+                 =================================================== -->
+            <div class="balloon-view active" id="viewAuth">
+
+                <!-- INDICADOR DO PERFIL ATIVO -->
+                <span class="mode-indicator-tag" id="roleIndicatorTag">Área do Hóspede</span>
+
+                <!-- ABAS LOG-IN / CADASTRAR-SE -->
+                <div class="balloon-tabs">
+                    <button type="button" class="balloon-tab-btn active" id="btnTabLogin" onclick="alternarAbaBalao('login')">
+                        Log-in
+                    </button>
+                    <button type="button" class="balloon-tab-btn" id="btnTabCadastro" onclick="alternarAbaBalao('cadastro')">
+                        Cadastrar-se
+                    </button>
                 </div>
-            </div>
-            
-            <button id="btn-top-anfitriao" class="btn-top-anfitriao" onclick="mostrarTela('anfitriao-login')">
-                Entrar como Anfitrião
-            </button>
-        </header>
 
-        <!-- CONTEÚDO PRINCIPAL (CARD COM FOTO E FORMULÁRIO) -->
-        <section class="main-card">
-            
-            <!-- FORMULÁRIO SOBREPOSTO À ESQUERDA -->
-            <div class="form-container">
-                
-                <!-- NAVEGAÇÃO ENTRE ABAS COM PÍLULA DESLIZANTE -->
-                <nav class="tabs">
-                    <div id="tab-indicator" class="tab-indicator"></div>
-                    <button id="tab-left" class="tab-btn active" onclick="cliqueAbaEsquerda()">Log-in</button>
-                    <button id="tab-right" class="tab-btn" onclick="cliqueAbaDireita()">Cadastrar-se</button>
-                </nav>
+                <!-- ÍCONE DE AVATAR -->
+                <div class="balloon-avatar-circle" id="balloonAvatarCircle">
+                    <i class="fa-solid fa-user" id="balloonAvatarIcon"></i>
+                </div>
 
-                <!-- 1. USUÁRIO COMUM: LOG-IN -->
-                <form id="screen-user-login" class="screen-content active-screen" onsubmit="event.preventDefault();">
-                    <div class="avatar-placeholder">
-                        <i class="fa-solid fa-user avatar-icon"></i>
+                <p class="balloon-subtitle" id="balloonSubtitle">
+                    Encontre quem combina com o seu jeito de morar.
+                </p>
+
+                <!-- FORMULÁRIO DE LOG-IN -->
+                <form class="balloon-form" id="formLogin" onsubmit="realizarLogin(event)">
+                    <div class="pill-input-wrapper">
+                        <i class="fa-regular fa-user left-icon"></i>
+                        <input type="text" id="loginUserInput" class="balloon-pill-input" placeholder="Nome de usuário" required>
                     </div>
 
-                    <p class="tagline">Encontre quem combina com o seu jeito de morar.</p>
-
-                    <div class="input-group">
-                        <i class="fa-regular fa-user"></i>
-                        <input type="text" placeholder="Nome de usuário" required>
+                    <div class="pill-input-wrapper">
+                        <i class="fa-solid fa-lock left-icon"></i>
+                        <input type="password" id="senhaLoginInput" class="balloon-pill-input" placeholder="Senha" required>
+                        <button type="button" class="toggle-eye-btn" onclick="alternarVisibilidadeSenha('senhaLoginInput', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
                     </div>
 
-                    <div class="input-group">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" placeholder="Senha" required>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Entrar</button>
-                    <a href="#" class="forgot-password">Esqueci minha senha</a>
+                    <button type="submit" class="btn-balloon-submit" id="btnSubmitLogin">Entrar</button>
                 </form>
 
-                <!-- 2. USUÁRIO COMUM: CADASTRAR-SE -->
-                <form id="screen-user-register" class="screen-content" onsubmit="event.preventDefault();">
-                    <div class="input-group">
-                        <i class="fa-regular fa-user"></i>
-                        <input type="text" placeholder="Nome de usuário" required>
+                <!-- FORMULÁRIO DE CADASTRAR-SE -->
+                <form class="balloon-form" id="formCadastro" style="display: none;" onsubmit="realizarCadastro(event)">
+                    <div class="pill-input-wrapper">
+                        <i class="fa-regular fa-user left-icon"></i>
+                        <input type="text" id="cadNomeInput" class="balloon-pill-input" placeholder="Nome completo" required>
                     </div>
 
-                    <div class="input-group">
-                        <i class="fa-solid fa-at"></i>
-                        <input type="email" placeholder="Endereço de e-mail" required>
+                    <div class="pill-input-wrapper">
+                        <i class="fa-regular fa-envelope left-icon"></i>
+                        <input type="email" id="cadEmailInput" class="balloon-pill-input" placeholder="E-mail" required>
                     </div>
 
-                    <div class="input-group">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" placeholder="Senha" required>
+                    <!-- CAMPO EXTRA EXIBIDO APENAS NO CADASTRO DE ANFITRIÃO -->
+                    <div class="pill-input-wrapper" id="campoCidadeAnfitriao" style="display: none;">
+                        <i class="fa-solid fa-location-dot left-icon"></i>
+                        <input type="text" id="cadCidadeInput" class="balloon-pill-input" placeholder="Cidade dos imóveis (ex: Florianópolis, SC)">
                     </div>
 
-                    <div class="input-group">
-                        <i class="fa-solid fa-phone"></i>
-                        <input type="tel" placeholder="Telefone" required>
+                    <div class="pill-input-wrapper">
+                        <i class="fa-solid fa-lock left-icon"></i>
+                        <input type="password" id="senhaCadastroInput" class="balloon-pill-input" placeholder="Criar senha" required>
+                        <button type="button" class="toggle-eye-btn" onclick="alternarVisibilidadeSenha('senhaCadastroInput', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
                     </div>
 
-                    <button type="submit" class="btn-submit">Entrar</button>
-                    <a href="#" class="forgot-password">Esqueci minha senha</a>
+                    <button type="submit" class="btn-balloon-submit" id="btnSubmitCadastro">Cadastrar</button>
                 </form>
 
-                <!-- 3. ANFITRIÃO: LOG-IN (Redireciona para anfitriao.html ao clicar em Entrar) -->
-                <form id="screen-anfitriao-login" class="screen-content" onsubmit="event.preventDefault(); window.location.href='anfitriao.html';">
-                    <div class="avatar-placeholder">
-                        <i class="fa-solid fa-user-shield avatar-icon"></i>
-                    </div>
-
-                    <p class="tagline">Acesse o seu painel de anfitrião.</p>
-
-                    <div class="input-group">
-                        <i class="fa-regular fa-user"></i>
-                        <input type="text" placeholder="Nome de usuário ou E-mail" required>
-                    </div>
-
-                    <div class="input-group">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" placeholder="Senha" required>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Entrar</button>
-                    <a href="#" class="forgot-password">Esqueci minha senha</a>
-                </form>
-
-                <!-- 4. ANFITRIÃO: CADASTRAR-SE (Redireciona para anfitriao.html ao clicar em Entrar) -->
-                <form id="screen-anfitriao-register" class="screen-content" onsubmit="event.preventDefault(); window.location.href='anfitriao.html';">
-                    <div class="input-group">
-                        <i class="fa-regular fa-user"></i>
-                        <input type="text" placeholder="Nome de usuário" required>
-                    </div>
-
-                    <div class="input-group">
-                        <i class="fa-solid fa-at"></i>
-                        <input type="email" placeholder="Endereço de e-mail" required>
-                    </div>
-
-                    <div class="input-group">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" placeholder="Senha" required>
-                    </div>
-
-                    <div class="input-group">
-                        <i class="fa-solid fa-phone"></i>
-                        <input type="tel" placeholder="Telefone" required>
-                    </div>
-
-                    <div class="input-row">
-                        <div class="input-group">
-                            <input type="text" placeholder="CPF">
-                        </div>
-                        <div class="input-group">
-                            <input type="text" placeholder="CNPJ">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Entrar</button>
-                    <a href="#" class="forgot-password">Esqueci minha senha</a>
-                </form>
-
+                <!-- LINK ESQUECI MINHA SENHA -->
+                <button type="button" class="link-forgot-trigger" id="btnEsqueciSenha" onclick="abrirRecuperacaoNoBalao()">
+                    Esqueci minha senha
+                </button>
             </div>
 
-            <!-- PAINEL DA IMAGEM DE FUNDO DO APARTAMENTO -->
-            <div class="hero-image-container">
-                <img src="apartamento.inicio.png" alt="Cozinha ROOMATCH" class="hero-image">
+            <!-- ===================================================
+                 VISÃO B: ESQUECI MINHA SENHA (DENTRO DO BALÃO)
+                 =================================================== -->
+            <div class="balloon-view" id="viewRecovery">
+
+                <div class="recovery-balloon-header">
+                    <button type="button" class="btn-mini-back" onclick="voltarParaLoginNoBalao()" title="Voltar para Log-in">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <span style="font-size: 0.72rem; font-weight: 800; color: #2D4A3E; letter-spacing: 0.6px; text-transform: uppercase;">
+                        Recuperar Senha
+                    </span>
+                    <div style="width: 34px;"></div>
+                </div>
+
+                <div class="recovery-icon-badge">
+                    <i class="fa-solid fa-key" id="recStepIcon"></i>
+                </div>
+
+                <h2 class="recovery-balloon-title" id="recStepTitle">Esqueceu sua senha?</h2>
+                <p class="recovery-balloon-desc" id="recStepDesc">
+                    Informe o e-mail cadastrado na sua conta RooMatch para enviarmos um código de verificação.
+                </p>
+
+                <div class="steps-dots-row">
+                    <span class="r-dot active" id="rDot1"></span>
+                    <span class="r-dot" id="rDot2"></span>
+                    <span class="r-dot" id="rDot3"></span>
+                </div>
+
+                <!-- PASSO 1: INFORMAR E-MAIL -->
+                <form class="rec-substep active" id="recSubstep1" onsubmit="enviarCodigoRecuperacao(event)">
+                    <div class="pill-input-wrapper">
+                        <i class="fa-regular fa-envelope left-icon"></i>
+                        <input type="email" id="recEmailInput" class="balloon-pill-input" placeholder="seuemail@exemplo.com.br" required>
+                    </div>
+
+                    <button type="submit" class="btn-balloon-submit full-btn">
+                        Enviar código <i class="fa-solid fa-paper-plane" style="margin-left: 6px;"></i>
+                    </button>
+                </form>
+
+                <!-- PASSO 2: CÓDIGO DE 6 DÍGITOS -->
+                <form class="rec-substep" id="recSubstep2" onsubmit="validarCodigoRecuperacao(event)">
+                    <div class="code-grid-6">
+                        <input type="text" maxlength="1" class="code-digit-input" oninput="moverProximoDigito(this, 0)" required>
+                        <input type="text" maxlength="1" class="code-digit-input" oninput="moverProximoDigito(this, 1)" required>
+                        <input type="text" maxlength="1" class="code-digit-input" oninput="moverProximoDigito(this, 2)" required>
+                        <input type="text" maxlength="1" class="code-digit-input" oninput="moverProximoDigito(this, 3)" required>
+                        <input type="text" maxlength="1" class="code-digit-input" oninput="moverProximoDigito(this, 4)" required>
+                        <input type="text" maxlength="1" class="code-digit-input" oninput="moverProximoDigito(this, 5)" required>
+                    </div>
+
+                    <button type="submit" class="btn-balloon-submit full-btn">
+                        Verificar código <i class="fa-solid fa-check" style="margin-left: 6px;"></i>
+                    </button>
+
+                    <p class="resend-small-text">
+                        Não recebeu? <button type="button" onclick="exibirToast('Novo código enviado!')">Reenviar código</button>
+                    </p>
+                </form>
+
+                <!-- PASSO 3: DEFINIR NOVA SENHA -->
+                <form class="rec-substep" id="recSubstep3" onsubmit="finalizarNovaSenha(event)">
+                    <div class="pill-input-wrapper">
+                        <i class="fa-solid fa-lock left-icon"></i>
+                        <input type="password" id="recNovaSenha" class="balloon-pill-input" placeholder="Nova senha (mín. 6 caracteres)" minlength="6" required>
+                        <button type="button" class="toggle-eye-btn" onclick="alternarVisibilidadeSenha('recNovaSenha', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <div class="pill-input-wrapper">
+                        <i class="fa-solid fa-lock left-icon"></i>
+                        <input type="password" id="recConfirmaSenha" class="balloon-pill-input" placeholder="Confirmar nova senha" minlength="6" required>
+                        <button type="button" class="toggle-eye-btn" onclick="alternarVisibilidadeSenha('recConfirmaSenha', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <button type="submit" class="btn-balloon-submit full-btn">
+                        Salvar nova senha <i class="fa-solid fa-circle-check" style="margin-left: 6px;"></i>
+                    </button>
+                </form>
+
             </div>
 
         </section>
+
+        <!-- IMAGEM DO APARTAMENTO À DIREITA -->
+        <div class="hero-image-panel">
+            <img src="apartamento.inicio.png" onerror="this.src='beira mar.jpg'" alt="Ambiente moderno RooMatch">
+        </div>
+
     </main>
 
-    <!-- LÓGICA DE NAVEGAÇÃO -->
+    <!-- NOTIFICAÇÃO FLUTUANTE -->
+    <div class="toast-balloon" id="toastBalloon">
+        <i class="fa-solid fa-circle-check"></i> <span id="toastBalloonText">Mensagem</span>
+    </div>
+
     <script>
-        let modoAtual = 'usuario';
+        let modoAnfitriao = false;
+        let abaAtual = "login";
 
-        function mostrarTela(tipo) {
-            document.querySelectorAll('.screen-content').forEach(s => s.classList.remove('active-screen'));
+        /* ALTERNA ENTRE MODO HÓSPEDE E MODO ANFITRIÃO SEM SAIR DA TELA */
+        function alternarPerfilAcesso() {
+            modoAnfitriao = !modoAnfitriao;
 
-            const tabLeft = document.getElementById('tab-left');
-            const tabRight = document.getElementById('tab-right');
-            const indicator = document.getElementById('tab-indicator');
-            const btnBack = document.getElementById('btn-back');
-            const btnTopAnfitriao = document.getElementById('btn-top-anfitriao');
+            const btnSwitch = document.getElementById("btnSwitchRole");
+            const switchIcon = document.getElementById("switchRoleIcon");
+            const switchText = document.getElementById("switchRoleText");
+            const roleTag = document.getElementById("roleIndicatorTag");
+            const avatarCircle = document.getElementById("balloonAvatarCircle");
+            const avatarIcon = document.getElementById("balloonAvatarIcon");
+            const campoCidade = document.getElementById("campoCidadeAnfitriao");
+            const inputCidade = document.getElementById("cadCidadeInput");
 
-            if (tipo === 'login' || tipo === 'cadastrar') {
-                modoAtual = 'usuario';
-                btnBack.classList.add('hidden');
-                btnTopAnfitriao.style.opacity = '1';
-                btnTopAnfitriao.style.pointerEvents = 'auto';
+            // Garante que volta para a visão principal do balão com animação suave
+            document.getElementById("viewRecovery").classList.remove("active");
+            const viewAuth = document.getElementById("viewAuth");
+            viewAuth.classList.remove("active");
+            void viewAuth.offsetWidth; // Reinicia a animação CSS balloonSwap
+            viewAuth.classList.add("active");
 
-                tabLeft.textContent = 'Log-in';
-                tabRight.textContent = 'Cadastrar-se';
+            if (modoAnfitriao) {
+                btnSwitch.classList.add("is-host-mode");
+                switchIcon.className = "fa-solid fa-user";
+                switchText.textContent = "Entrar como Hóspede";
 
-                if (tipo === 'login') {
-                    document.getElementById('screen-user-login').classList.add('active-screen');
-                    indicator.style.transform = 'translateX(0)';
-                } else {
-                    document.getElementById('screen-user-register').classList.add('active-screen');
-                    indicator.style.transform = 'translateX(100%)';
-                }
-            } 
-            else if (tipo === 'anfitriao-login' || tipo === 'anfitriao-register') {
-                modoAtual = 'anfitriao';
-                btnBack.classList.remove('hidden');
-                btnTopAnfitriao.style.opacity = '0.5';
-                btnTopAnfitriao.style.pointerEvents = 'none';
+                roleTag.textContent = "Área do Anfitrião";
+                avatarCircle.classList.add("host-active");
+                avatarIcon.className = "fa-solid fa-house-user";
 
-                tabLeft.textContent = 'Entrar anfitrião';
-                tabRight.textContent = 'Cadastrar anfitrião';
+                document.getElementById("loginUserInput").placeholder = "E-mail ou usuário do anfitrião";
+                document.getElementById("btnSubmitLogin").textContent = "Entrar como Anfitrião";
+                document.getElementById("btnSubmitCadastro").textContent = "Cadastrar Anfitrião";
 
-                if (tipo === 'anfitriao-login') {
-                    document.getElementById('screen-anfitriao-login').classList.add('active-screen');
-                    indicator.style.transform = 'translateX(0)';
-                } else {
-                    document.getElementById('screen-anfitriao-register').classList.add('active-screen');
-                    indicator.style.transform = 'translateX(100%)';
-                }
+                campoCidade.style.display = "flex";
+                inputCidade.required = true;
+            } else {
+                btnSwitch.classList.remove("is-host-mode");
+                switchIcon.className = "fa-solid fa-house-user";
+                switchText.textContent = "Entrar como Anfitrião";
+
+                roleTag.textContent = "Área do Hóspede";
+                avatarCircle.classList.remove("host-active");
+                avatarIcon.className = "fa-solid fa-user";
+
+                document.getElementById("loginUserInput").placeholder = "Nome de usuário";
+                document.getElementById("btnSubmitLogin").textContent = "Entrar";
+                document.getElementById("btnSubmitCadastro").textContent = "Cadastrar";
+
+                campoCidade.style.display = "none";
+                inputCidade.required = false;
+            }
+
+            atualizarTextosSubtitulo();
+        }
+
+        function atualizarTextosSubtitulo() {
+            const sub = document.getElementById("balloonSubtitle");
+            if (modoAnfitriao) {
+                sub.textContent = abaAtual === "login"
+                    ? "Gerencie seus imóveis e receba hóspedes com praticidade."
+                    : "Cadastre-se como anfitrião e anuncie seus espaços no RooMatch.";
+            } else {
+                sub.textContent = abaAtual === "login"
+                    ? "Encontre quem combina com o seu jeito de morar."
+                    : "Crie sua conta e encontre o espaço ideal para você.";
             }
         }
 
-        function cliqueAbaEsquerda() {
-            if (modoAtual === 'usuario') {
-                mostrarTela('login');
+        /* ALTERNAR ENTRE LOG-IN E CADASTRAR-SE NO BALÃO */
+        function alternarAbaBalao(aba) {
+            abaAtual = aba;
+            const isLogin = aba === "login";
+            document.getElementById("btnTabLogin").classList.toggle("active", isLogin);
+            document.getElementById("btnTabCadastro").classList.toggle("active", !isLogin);
+
+            document.getElementById("formLogin").style.display = isLogin ? "flex" : "none";
+            document.getElementById("formCadastro").style.display = isLogin ? "none" : "flex";
+            document.getElementById("btnEsqueciSenha").style.display = isLogin ? "inline-block" : "none";
+
+            atualizarTextosSubtitulo();
+        }
+
+        function alternarVisibilidadeSenha(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector("i");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
             } else {
-                mostrarTela('anfitriao-login');
+                input.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
             }
         }
 
-        function cliqueAbaDireita() {
-            if (modoAtual === 'usuario') {
-                mostrarTela('cadastrar');
+        /* ABRIR / FECHAR RECUPERAÇÃO DE SENHA DENTRO DO BALÃO */
+        function abrirRecuperacaoNoBalao() {
+            resetarEtapasRecuperacao();
+            document.getElementById("viewAuth").classList.remove("active");
+            document.getElementById("viewRecovery").classList.add("active");
+        }
+
+        function voltarParaLoginNoBalao() {
+            document.getElementById("viewRecovery").classList.remove("active");
+            document.getElementById("viewAuth").classList.add("active");
+            alternarAbaBalao("login");
+        }
+
+        function irParaSubstep(num) {
+            document.querySelectorAll(".rec-substep").forEach(el => el.classList.remove("active"));
+            document.querySelectorAll(".r-dot").forEach((dot, idx) => {
+                dot.classList.toggle("active", idx + 1 === num);
+            });
+            document.getElementById(`recSubstep${num}`).classList.add("active");
+        }
+
+        function resetarEtapasRecuperacao() {
+            document.getElementById("recStepIcon").className = "fa-solid fa-key";
+            document.getElementById("recStepTitle").textContent = "Esqueceu sua senha?";
+            document.getElementById("recStepDesc").textContent = "Informe o e-mail cadastrado na sua conta RooMatch para enviarmos um código de verificação.";
+            document.getElementById("recEmailInput").value = "";
+            document.querySelectorAll(".code-digit-input").forEach(inp => inp.value = "");
+            document.getElementById("recNovaSenha").value = "";
+            document.getElementById("recConfirmaSenha").value = "";
+            irParaSubstep(1);
+        }
+
+        function enviarCodigoRecuperacao(event) {
+            event.preventDefault();
+            const email = document.getElementById("recEmailInput").value.trim();
+            document.getElementById("recStepIcon").className = "fa-solid fa-shield-halved";
+            document.getElementById("recStepTitle").textContent = "Verifique seu e-mail";
+            document.getElementById("recStepDesc").textContent = `Enviamos um código de 6 dígitos para ${email}.`;
+            irParaSubstep(2);
+            document.querySelectorAll(".code-digit-input")[0].focus();
+        }
+
+        function moverProximoDigito(input, index) {
+            const boxes = document.querySelectorAll(".code-digit-input");
+            if (input.value.length === 1 && index < boxes.length - 1) {
+                boxes[index + 1].focus();
+            }
+        }
+
+        function validarCodigoRecuperacao(event) {
+            event.preventDefault();
+            document.getElementById("recStepIcon").className = "fa-solid fa-lock-open";
+            document.getElementById("recStepTitle").textContent = "Criar nova senha";
+            document.getElementById("recStepDesc").textContent = "Defina uma nova senha segura para acessar sua conta.";
+            irParaSubstep(3);
+        }
+
+        function finalizarNovaSenha(event) {
+            event.preventDefault();
+            const s1 = document.getElementById("recNovaSenha").value;
+            const s2 = document.getElementById("recConfirmaSenha").value;
+
+            if (s1 !== s2) {
+                exibirToast("As senhas não coincidem. Verifique!");
+                return;
+            }
+
+            exibirToast("Senha redefinida com sucesso!");
+            setTimeout(() => {
+                voltarParaLoginNoBalao();
+            }, 900);
+        }
+
+        function exibirToast(msg) {
+            const toast = document.getElementById("toastBalloon");
+            document.getElementById("toastBalloonText").textContent = msg;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 2600);
+        }
+
+        /* REDIRECIONAMENTO AO ENTRAR */
+        function realizarLogin(event) {
+            event.preventDefault();
+            document.body.classList.add("is-leaving");
+            setTimeout(() => {
+                window.location.href = modoAnfitriao ? "anfitriao.html" : "home.html";
+            }, 300);
+        }
+
+        /* CADASTRO DE HÓSPEDE OU ANFITRIÃO */
+        function realizarCadastro(event) {
+            event.preventDefault();
+            if (modoAnfitriao) {
+                const perfilAnfitriao = {
+                    nome: document.getElementById("cadNomeInput").value.trim(),
+                    email: document.getElementById("cadEmailInput").value.trim(),
+                    cidade: document.getElementById("cadCidadeInput").value.trim() || "Florianópolis, SC",
+                    telefone: "(48) 99876-5432",
+                    objetivo: "anunciar",
+                    foto: "perfil.anfitriao.webp"
+                };
+                localStorage.setItem("roomatch_perfil_anfitriao", JSON.stringify(perfilAnfitriao));
+                exibirToast("Conta de Anfitrião criada! Entrando no painel...");
+                setTimeout(() => {
+                    document.body.classList.add("is-leaving");
+                    setTimeout(() => window.location.href = "anfitriao.html", 300);
+                }, 900);
             } else {
-                mostrarTela('anfitriao-register');
+                exibirToast("Cadastro realizado com sucesso! Faça seu login.");
+                setTimeout(() => alternarAbaBalao("login"), 900);
             }
         }
     </script>
